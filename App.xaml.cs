@@ -28,6 +28,7 @@ namespace TaskManagerGUI
             services.AddSingleton<IAuthHandler, AuthService>();
             services.AddSingleton<ILoginEnterHandler,LoginEnterHander>();
             services.AddTransient<WindowFactoryService>();
+            services.AddTransient<ICreateNewTaskHandler, CreateNewTaskHandler>();
 
             ServiceProvider = services.BuildServiceProvider();
 

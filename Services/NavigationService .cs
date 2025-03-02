@@ -1,5 +1,4 @@
-﻿
-using System.Windows;
+﻿using System.Windows;
 using TaskManagerGUI.Interfaces;
 using TaskManagerGUI.Models.Enums;
 
@@ -43,11 +42,8 @@ namespace TaskManagerGUI.Services
 
                 }
             }
-            
 
             _windows[windowType].Show();
         }
-            
-         
-        }
+    }
 }
