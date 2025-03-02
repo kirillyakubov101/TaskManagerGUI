@@ -9,10 +9,8 @@ using TaskManagerGUI.Models.Entities;
 
 namespace TaskManagerGUI.ViewModel
 {
-    public class NewTaskWindowViewModel : INotifyPropertyChanged
+    public class NewTaskWindowViewModel : ViewModelBase
     {
-        public event PropertyChangedEventHandler? PropertyChanged;
-
         private string _title;
         private string _description;
         private string _priority = "Low";     // Default priority
@@ -57,13 +55,6 @@ namespace TaskManagerGUI.ViewModel
         {
             get => _dueDate;
             set { _dueDate = value; OnPropertyChanged(nameof(DueDate)); }
-        }
-
-      
-
-        protected virtual void OnPropertyChanged(string propertyName)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
         private bool CanCancelCommand(object parameter)

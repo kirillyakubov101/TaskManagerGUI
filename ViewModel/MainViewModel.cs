@@ -7,7 +7,7 @@ using TaskManagerGUI.Models.Entities;
 
 namespace TaskManagerGUI.ViewModel
 {
-    public class MainViewModel : INotifyPropertyChanged
+    public class MainViewModel : ViewModelBase
     {
         public ICommand SignInCommand { get; set; }
 
@@ -16,7 +16,7 @@ namespace TaskManagerGUI.ViewModel
         private string _email;
         private string _password;
 
-        public event PropertyChangedEventHandler? PropertyChanged;
+       
 
         public string Email
         {
@@ -37,13 +37,6 @@ namespace TaskManagerGUI.ViewModel
                 OnPropertyChanged(nameof(Password));
             }
         }
-
-        protected virtual void OnPropertyChanged(string propertyName)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-
-       
 
         public MainViewModel(ISignInHandler signInHandler)
         {
