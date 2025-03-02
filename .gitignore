@@ -1,0 +1,94 @@
+# Build results
+bin/
+obj/
+
+# User-specific files
+*.user
+*.rsuser
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Visual Studio Code workspace
+.vscode/
+
+# Rider IDE
+.idea/
+*.sln.iml
+
+# Auto-generated files
+*.designer.cs
+*.g.cs
+*.g.i.cs
+
+# Application insights config
+ApplicationInsights.config
+
+# Packages folder
+packages/
+*.nupkg
+*.snupkg
+
+# NuGet
+project.lock.json
+project.fragment.lock.json
+artifacts/
+*.nuget.props
+*.nuget.targets
+
+# Temporary files
+*.tmp
+*.temp
+*.log
+
+# Publish output
+Publish/
+
+# Resharper
+_ReSharper*/
+*.DotSettings.user
+
+# Visual Studio-specific files
+.vs/
+*.dbmdl
+*.dbproj.schemaview
+*.jfm
+
+# Windows Thumbnail Database files
+Thumbs.db
+ehthumbs.db
+
+# User-specific preferences
+*.vspscc
+*.vssscc
+*.sln.cache
+
+# Dependency folders
+node_modules/
+wwwroot/lib/
+
+# Rider-specific
+.idea/
+*.sln.iml
+
+# DotNet specific
+.DS_Store
+*.psess
+*.vspx
+*.vsp
+
+# Secret configuration files
+secrets.json
+appsettings.Development.json
+
+# JetBrains Rider & ReSharper
+.idea/
+*.sln.iml
+_ReSharper*/
+*.DotSettings.user
+
+# Misc
+*.bak
+*.old
+*.orig
+*.swp
