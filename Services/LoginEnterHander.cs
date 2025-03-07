@@ -21,7 +21,7 @@ namespace TaskManagerGUI.Services
         {
             if (!_authHandler.IsAuthenticated()) { throw new Exception("No token"); }
             // Set up the HTTP GET request with the Authorization header
-            var request = new HttpRequestMessage(HttpMethod.Get, "https://localhost:7281/api/tasks");
+            var request = new HttpRequestMessage(HttpMethod.Get, "https://taskmanager-api-prod-eydvashjgtasftbj.canadaeast-01.azurewebsites.net/api/tasks");
             request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _authHandler.GetSessionToken());
 
             // Send the request

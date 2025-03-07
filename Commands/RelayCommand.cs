@@ -23,5 +23,10 @@ namespace TaskManagerGUI.Commands
         {
             _Execute(parameter);
         }
+
+        public void RaiseCanExecuteChanged()
+        {
+            CanExecuteChanged?.Invoke(this, EventArgs.Empty);
+        }
     }
 }

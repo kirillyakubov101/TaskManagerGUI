@@ -1,7 +1,6 @@
 ﻿using System.Net.Http;
 using System.Net.Http.Json;
 using System.Text.Json;
-using System.Windows;
 using TaskManagerGUI.Interfaces;
 using TaskManagerGUI.Models.Entities;
 using TaskManagerGUI.Models.Enums;
@@ -22,38 +21,29 @@ namespace TaskManagerGUI.Services
         }
         public async Task SignIn(SignInDto signInDto)
         {
-            try
+            var response = await _httpClient.PostAsJsonAsync("https://taskmanager-api-prod-eydvashjgtasftbj.canadaeast-01.azurewebsites.net/api/identity/login", signInDto);
+
+            if (response.IsSuccessStatusCode)
             {
-                var response = await _httpClient.PostAsJsonAsync("https://localhost:7281/api/identity/login", signInDto);
-
-                if (response == null) { throw new Exception("SignInAsync responseMessage is null"); }
-                if (response.IsSuccessStatusCode)
+                var json = await response.Content.ReadAsStringAsync();
+                var authResponse = JsonSerializer.Deserialize<SignInTokenResponse>(json, new JsonSerializerOptions
                 {
-                    var json = await response.Content.ReadAsStringAsync();
-                    var authResponse = JsonSerializer.Deserialize<SignInTokenResponse>(json, new JsonSerializerOptions
-                    {
-                        PropertyNameCaseInsensitive = true
-                    });
+                    PropertyNameCaseInsensitive = true
+                });
 
-                    if (!string.IsNullOrEmpty(authResponse?.AccessToken))
-                    {
-                        //{ authResponse.TokenType}
-                        string token = $"{authResponse.AccessToken}";
-                        _authHandler.RegisterSessionToken(token);  // Store token in memory
-                        _navigation.OpenWindow(WindowType.Dashboard);
-                        _navigation.CloseWindow(WindowType.LoginWindow);
-                    }
-                }
-                else
+                if (!string.IsNullOrEmpty(authResponse?.AccessToken))
                 {
-                    //ERROR
-                    
-                    MessageBox.Show("Wrong credentials");
+                    //{ authResponse.TokenType}
+                    string token = $"{authResponse.AccessToken}";
+                    _authHandler.RegisterSessionToken(token);  // Store token in memory
+                    _navigation.OpenWindow(WindowType.Dashboard);
+                    _navigation.CloseWindow(WindowType.LoginWindow);
                 }
             }
-            catch (Exception)
+            else
             {
-                return;
+                //TODO:Create exceptions types
+                throw new Exception();
             }
         }
     }

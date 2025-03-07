@@ -19,6 +19,9 @@ namespace TaskManagerGUI.Services
                 case WindowType.LoginWindow:
                     newWindowInst = new MainWindow(serviceProvider.GetRequiredService<MainViewModel>());
                     break;
+                case WindowType.SignUpWindow:
+                    newWindowInst = new SignUpWindow(serviceProvider.GetRequiredService<SignUpViewModel>());
+                    break;
                 default:
                     throw new Exception("No such window type!");
 

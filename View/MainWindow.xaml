@@ -4,10 +4,15 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TaskManagerGUI.View"
+        xmlns:converter ="clr-namespace:TaskManagerGUI.Converters"
         mc:Ignorable="d"
         Title="MainWindow" Height="800" Width="1200"
         WindowStartupLocation="CenterScreen"
         >
+
+    <Window.Resources>
+        <converter:BoolToVisibilityConverter x:Key="BoolToVis"/>
+    </Window.Resources>
 
     <Grid>
         <!-- Background Shadow Effect -->
@@ -29,7 +34,7 @@
 
                 <!-- Email -->
                 <TextBlock Text="Email" FontSize="14" Foreground="#666"/>
-                <TextBox Text="{Binding Email}" Name="txtEmail" Height="35" Margin="0,5,0,15" Padding="5"
+                <TextBox Text="{Binding Email ,UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}" Name="txtEmail" Height="35" Margin="0,5,0,15" Padding="5"
                   BorderBrush="#ccc" BorderThickness="1"/>
 
                 <!-- Password -->
@@ -48,10 +53,23 @@
                 <!-- Register Section -->
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="20,10,20,0">
                     <TextBlock Text="Don't have an account yet?" FontSize="12" Foreground="#666"/>
-                    <TextBlock Text=" Register for free" Foreground="#0078D7" FontSize="12"
-                        FontWeight="Bold" Cursor="Hand"/>
+                    <Button Content="Register for free"
+                        Command="{Binding RegisterCommand}"
+                        Foreground="#0078D7" FontSize="12"
+                        FontWeight="Bold" Cursor="Hand"
+                        Background="Transparent" BorderBrush="Transparent"
+                        Padding="0"
+                        HorizontalAlignment="Left"/>    
                 </StackPanel>
             </StackPanel>
         </Border>
+
+        <Grid Background="#80000000" Visibility="{Binding IsLoading, Converter={StaticResource BoolToVis}}">
+            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                <TextBlock Text="Loading..." Foreground="White" FontSize="20" Margin="0,0,0,10"/>
+                <ProgressBar Width="200" IsIndeterminate="True"/>
+            </StackPanel>
+        </Grid>
+
     </Grid>
 </Window>

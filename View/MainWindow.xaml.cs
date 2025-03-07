@@ -12,10 +12,14 @@ namespace TaskManagerGUI
         {
             InitializeComponent();
             DataContext = mainViewModel;
-
-            this.Deactivated += MainWindow_Deactivated;
+            mainViewModel.OnSignInAction += MainViewModel_OnSignInAction;
             this.Closed += MainWindow_Closed;
-            
+        }
+
+        private void MainViewModel_OnSignInAction()
+        {
+            txtEmail.Clear();
+            txtpassword.passwordBox.Clear();
         }
 
         private void MainWindow_Closed(object? sender, EventArgs e)
@@ -23,10 +27,5 @@ namespace TaskManagerGUI
             Application.Current.Shutdown();
         }
 
-        private void MainWindow_Deactivated(object? sender, EventArgs e)
-        {
-            if(this.IsFocused)
-            (DataContext as MainViewModel).ResetFields();
-        }
     }
 }

@@ -1,4 +1,4 @@
-﻿using System.ComponentModel;
+﻿using System.Windows;
 using System.Windows.Input;
 using TaskManagerGUI.Commands;
 using TaskManagerGUI.Interfaces;
@@ -9,14 +9,35 @@ namespace TaskManagerGUI.ViewModel
 {
     public class MainViewModel : ViewModelBase
     {
-        public ICommand SignInCommand { get; set; }
+        public ICommand SignInCommand { get;}
+        public ICommand RegisterCommand { get;}
+        public event Action OnSignInAction;
 
         private readonly ISignInHandler _signInHandler;
+        private readonly INavigationService _navigationService;
+
 
         private string _email;
         private string _password;
+        private bool _isLoading;
 
-       
+        public MainViewModel(ISignInHandler signInHandler, INavigationService navigationService)
+        {
+            this._signInHandler = signInHandler;
+            this._navigationService = navigationService;
+            SignInCommand = new RelayCommand(ExecuteSignIn, CanExecuteSignIn);
+            RegisterCommand = new RelayCommand(ExecuteRegisterNewUser, CanExecuteRegisterNewUser);
+        }
+
+        public bool IsLoading
+        {
+            get => _isLoading;
+            set
+            {
+                _isLoading = value;
+                OnPropertyChanged(nameof(IsLoading));
+            }
+        }
 
         public string Email
         {
@@ -25,6 +46,7 @@ namespace TaskManagerGUI.ViewModel
             {
                 _email = value;
                 OnPropertyChanged(nameof(Email));
+                ((RelayCommand)SignInCommand).RaiseCanExecuteChanged();
             }
         }
 
@@ -35,38 +57,54 @@ namespace TaskManagerGUI.ViewModel
             {
                 _password = value;
                 OnPropertyChanged(nameof(Password));
+                ((RelayCommand)SignInCommand).RaiseCanExecuteChanged();
             }
         }
 
-        public MainViewModel(ISignInHandler signInHandler)
-        {
-            this._signInHandler = signInHandler;
 
-            //SignInCommand = new RelayCommand(
-            //async (parameter) => await SignInAsync(parameter),
-            //(parameter) => CanSignIn(parameter));
-            SignInCommand = new RelayCommand(ExecuteSignIn, CanExecuteSignIn);
 
-        }
-
-        public bool CanSignIn(object parameter)
+        private bool CanExecuteRegisterNewUser(object parameter)
         {
             return true;
         }
+        private void ExecuteRegisterNewUser(object parameter)
+        {
+            _navigationService.OpenWindow(Models.Enums.WindowType.SignUpWindow);
+            _navigationService.CloseWindow(Models.Enums.WindowType.LoginWindow);
+            OnSignInAction?.Invoke();
+        }
 
-        // Method that is called when SignInCommand is executed
-        public async Task SignInAsync(object parameter)
+        private async Task SignInAsync(object parameter)
         {
             var signInDto = new SignInDto()
             {
-                Email = this._email,
-                Password = Password
+                Email = this.Email,
+                Password = this.Password
             };
 
-            if (signInDto != null)
+            IsLoading = true;
+
+            try
             {
-                await _signInHandler.SignIn(signInDto);
+                if (signInDto != null)
+                {
+                    await _signInHandler.SignIn(signInDto);
+                    OnSignInAction?.Invoke();
+                }
             }
+
+            catch (Exception ex)
+            {
+                throw new Exception();
+            }
+
+            finally
+            {
+                IsLoading = false;
+            }
+
+           
+
         }
 
         private async void ExecuteSignIn(object parameter)
@@ -76,13 +114,9 @@ namespace TaskManagerGUI.ViewModel
 
         private bool CanExecuteSignIn(object parameter)
         {
-            return CanSignIn(parameter);
+            //TODO: add a correct validation
+            return !string.IsNullOrWhiteSpace(Email) && !string.IsNullOrWhiteSpace(Password);
         }
 
-        public void ResetFields()
-        {
-            Email = string.Empty;
-            Password = string.Empty;
-        }
     }
 }

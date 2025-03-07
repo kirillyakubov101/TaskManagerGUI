@@ -19,16 +19,39 @@
 
         <!-- Task List Placeholder -->
         <ListView Name="TaskListView"
-                  Margin="10,50,10,10"
-                  ItemsSource="{Binding Tasks}">
+          Margin="10,50,10,10"
+          ItemsSource="{Binding Tasks}">
             <ListView.View>
                 <GridView>
-                    <GridViewColumn Header="Title" DisplayMemberBinding="{Binding Title}" Width="200"/>
-                    <GridViewColumn Header="Description" DisplayMemberBinding="{Binding Description}" Width="250"/>
-                    <GridViewColumn Header="Status" DisplayMemberBinding="{Binding Status}" Width="100"/>
-                    <GridViewColumn Header="Priority" DisplayMemberBinding="{Binding Priority}" Width="100"/>
-                    <GridViewColumn Header="Created At" DisplayMemberBinding="{Binding CreatedAt}" Width="120"/>
-                    <GridViewColumn Header="Due Date" DisplayMemberBinding="{Binding DueDate}" Width="120"/>
+                    <GridViewColumn Header="Title" DisplayMemberBinding="{Binding Title}" Width="auto"/>
+                    <GridViewColumn Header="Description" DisplayMemberBinding="{Binding Description}" Width="auto"/>
+                    <GridViewColumn Header="Status" DisplayMemberBinding="{Binding Status}" Width="auto"/>
+                    <GridViewColumn Header="Priority" DisplayMemberBinding="{Binding Priority}" Width="auto"/>
+                    <GridViewColumn Header="Created At" DisplayMemberBinding="{Binding CreatedAt}" Width="auto"/>
+                    <GridViewColumn Header="Due Date" DisplayMemberBinding="{Binding DueDate}" Width="auto"/>
+
+                    <!-- "..." Button Column -->
+                    <GridViewColumn Width="50">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <Button Content="Edit"
+                                Width="30"
+                                HorizontalAlignment="Center">
+                                    <Button.ContextMenu>
+                                        <ContextMenu>
+                                            <MenuItem Header="Edit"
+                                              Command="{Binding DataContext.EditTaskCommand, RelativeSource={RelativeSource AncestorType=ListView}}"
+                                              CommandParameter="{Binding}"/>
+                                            <MenuItem Header="Delete"
+                                              Command="{Binding DataContext.DeleteTaskCommand, RelativeSource={RelativeSource AncestorType=ListView}}"
+                                              CommandParameter="{Binding}"/>
+                                        </ContextMenu>
+                                    </Button.ContextMenu>
+                                </Button>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+
                 </GridView>
             </ListView.View>
         </ListView>

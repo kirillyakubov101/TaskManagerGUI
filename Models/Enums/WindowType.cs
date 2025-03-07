@@ -4,6 +4,6 @@
     {
         LoginWindow,
         Dashboard,
-        NewTaskWindow
+        SignUpWindow,
     }
 }
