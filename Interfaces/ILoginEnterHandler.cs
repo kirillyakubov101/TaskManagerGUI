@@ -4,5 +4,5 @@ namespace TaskManagerGUI.Interfaces;
 
 public interface ILoginEnterHandler
 {
-    Task<IEnumerable<UserTaskDto>> GetAllUserTasks(); 
+    Task<IEnumerable<UserTaskDto>> GetAllUserTasks();
 }

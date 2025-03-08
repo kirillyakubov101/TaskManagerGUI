@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using System.Windows.Controls;
 using TaskManagerGUI.ViewModel;
 
 namespace TaskManagerGUI.View
@@ -35,6 +36,23 @@ namespace TaskManagerGUI.View
             Application.Current.Shutdown();
         }
 
-       
+        private void OpenContextMenu_OnClick(object sender, RoutedEventArgs e)
+        {
+            if (sender is Button button && button.ContextMenu != null)
+            {
+                button.ContextMenu.IsOpen = true;
+            }
+        }
+
+        //private void EditTask_OnClick(object sender, RoutedEventArgs e)
+        //{
+
+        //}
+
+        //private void DeleteTask_OnClick(object sender, RoutedEventArgs e)
+        //{
+        //    var menuItem = sender as MenuItem;
+        //    (DataContext as DashboardViewModel).DeleteTaskCommand.Execute(menuItem);
+        //}
     }
 }

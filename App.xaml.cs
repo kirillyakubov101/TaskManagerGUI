@@ -35,6 +35,8 @@ namespace TaskManagerGUI
             services.AddTransient<WindowFactoryService>();
             services.AddTransient<ICreateNewTaskHandler, CreateNewTaskHandler>();
             services.AddTransient<SignUpViewModel>();
+            services.AddTransient<IDeleteTaskHander, DeleteTaskHandler>();
+            services.AddTransient<IEditTaskHandler, EditTaskHandler>();
 
             ServiceProvider = services.BuildServiceProvider();
 
