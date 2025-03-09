@@ -5,6 +5,8 @@ using System.Windows.Input;
 using TaskManagerGUI.Commands;
 using TaskManagerGUI.Interfaces;
 using TaskManagerGUI.Models.Entities;
+using FluentValidation;
+using TaskManagerGUI.Models.Validators;
 
 namespace TaskManagerGUI.ViewModel
 {
@@ -17,6 +19,9 @@ namespace TaskManagerGUI.ViewModel
 
         private IServiceProvider _serviceProvider;
 
+        //validators
+        private readonly CreateNewTaskDtoValidator _createNewTaskDtoValidator;
+
         // Commands
         public ICommand CreateTaskCommand { get; }
         public ICommand CancelCommand { get; }
@@ -28,6 +33,7 @@ namespace TaskManagerGUI.ViewModel
         public NewTaskWindowViewModel(IServiceProvider serviceProvider)
         {
             _serviceProvider = serviceProvider;
+            _createNewTaskDtoValidator = new CreateNewTaskDtoValidator();
             CancelCommand = new RelayCommand(ExecuteCancelCommand, CanCancelCommand);
             CreateTaskCommand = new RelayCommand(ExecuteCreateTaskCommand, CanCreateTaskCommand);
         }
@@ -80,16 +86,25 @@ namespace TaskManagerGUI.ViewModel
             {
                 myDateTime = myDateTime.ToUniversalTime();  // Convert to UTC if it's not already
             }
-
-            CreateNewTaskDto createNewTaskDto = new CreateNewTaskDto()
-            {
-                Title = Title,
-                Description = Description,
-                Priority = priorityEnum,
-                DueDate = myDateTime,
-            };
             try
             {
+                CreateNewTaskDto createNewTaskDto = new CreateNewTaskDto()
+                {
+                    Title = Title,
+                    Description = Description,
+                    Priority = priorityEnum,
+                    DueDate = myDateTime,
+                };
+
+                var validationResult = _createNewTaskDtoValidator.Validate(createNewTaskDto);
+
+                if (!validationResult.IsValid)
+                {
+                    string allErrors = string.Join("\n", validationResult.Errors.Select(x => x.ErrorMessage));
+                    MessageBox.Show(allErrors);
+                    return;
+                }
+
                 bool successful = await _serviceProvider.GetRequiredService<ICreateNewTaskHandler>().CreateNewTask(createNewTaskDto);
 
                 if (successful)

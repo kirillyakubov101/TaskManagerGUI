@@ -6,6 +6,9 @@ using TaskManagerGUI.Services;
 using TaskManagerGUI.ViewModel;
 using TaskManagerGUI.Models.Enums;
 using TaskManagerGUI.Middleware;
+using FluentValidation;
+using TaskManagerGUI.Models.Validators;
+using TaskManagerGUI.Models.Entities;
 
 namespace TaskManagerGUI
 {
@@ -15,30 +18,34 @@ namespace TaskManagerGUI
     public partial class App : Application
     {
         public static IServiceProvider ServiceProvider { get; private set; }
+        private ServiceCollection _services;
 
+        public App()
+        {
+            _services = new ServiceCollection();
+        }
+        
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
-            var services = new ServiceCollection();
 
+            _services.AddSingleton<HttpClient>();
+            _services.AddSingleton<INavigationService,NavigationService>();
+            _services.AddSingleton<ISignInHandler, SignInHandler>();
+            _services.AddSingleton<ISignUpHandler, SignUpHandler>();
+            _services.AddSingleton<MainViewModel>();
+            _services.AddSingleton<DashboardViewModel>();
+            _services.AddSingleton<IAuthHandler, AuthService>();
+            _services.AddSingleton<ILoginEnterHandler,LoginEnterHander>();
+            _services.AddSingleton<ExceptionHandlerService>();
 
-            services.AddSingleton<HttpClient>();
-            services.AddSingleton<INavigationService,NavigationService>();
-            services.AddSingleton<ISignInHandler, SignInHandler>();
-            services.AddSingleton<ISignUpHandler, SignUpHandler>();
-            services.AddSingleton<MainViewModel>();
-            services.AddSingleton<DashboardViewModel>();
-            services.AddSingleton<IAuthHandler, AuthService>();
-            services.AddSingleton<ILoginEnterHandler,LoginEnterHander>();
-            services.AddSingleton<ExceptionHandlerService>();
+            _services.AddTransient<WindowFactoryService>();
+            _services.AddTransient<ICreateNewTaskHandler, CreateNewTaskHandler>();
+            _services.AddTransient<SignUpViewModel>();
+            _services.AddTransient<IDeleteTaskHander, DeleteTaskHandler>();
+            _services.AddTransient<IEditTaskHandler, EditTaskHandler>();
 
-            services.AddTransient<WindowFactoryService>();
-            services.AddTransient<ICreateNewTaskHandler, CreateNewTaskHandler>();
-            services.AddTransient<SignUpViewModel>();
-            services.AddTransient<IDeleteTaskHander, DeleteTaskHandler>();
-            services.AddTransient<IEditTaskHandler, EditTaskHandler>();
-
-            ServiceProvider = services.BuildServiceProvider();
+            ServiceProvider = _services.BuildServiceProvider();
 
             // Global exception handling setup
             this.DispatcherUnhandledException += OnDispatcherUnhandledException;

@@ -3,6 +3,7 @@ using System.Windows.Input;
 using TaskManagerGUI.Commands;
 using TaskManagerGUI.Interfaces;
 using TaskManagerGUI.Models.Entities;
+using TaskManagerGUI.Models.Validators;
 
 
 namespace TaskManagerGUI.ViewModel
@@ -15,6 +16,7 @@ namespace TaskManagerGUI.ViewModel
 
         private readonly ISignInHandler _signInHandler;
         private readonly INavigationService _navigationService;
+        private readonly SignInDtoValidator _signInDtoValidator;
 
 
         private string _email;
@@ -25,6 +27,7 @@ namespace TaskManagerGUI.ViewModel
         {
             this._signInHandler = signInHandler;
             this._navigationService = navigationService;
+            this._signInDtoValidator = new SignInDtoValidator();
             SignInCommand = new RelayCommand(ExecuteSignIn, CanExecuteSignIn);
             RegisterCommand = new RelayCommand(ExecuteRegisterNewUser, CanExecuteRegisterNewUser);
         }
@@ -81,6 +84,16 @@ namespace TaskManagerGUI.ViewModel
                 Email = this.Email,
                 Password = this.Password
             };
+
+            var validationResult = _signInDtoValidator.Validate(signInDto);
+
+            if (!validationResult.IsValid)
+            {
+                string allErrors = string.Join("\n", validationResult.Errors.Select(x => x.ErrorMessage));
+                MessageBox.Show(allErrors);
+                return;
+            }
+
 
             IsLoading = true;
 
