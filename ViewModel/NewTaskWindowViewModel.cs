@@ -86,44 +86,41 @@ namespace TaskManagerGUI.ViewModel
             {
                 myDateTime = myDateTime.ToUniversalTime();  // Convert to UTC if it's not already
             }
-            try
+
+
+            CreateNewTaskDto createNewTaskDto = new CreateNewTaskDto()
             {
-                CreateNewTaskDto createNewTaskDto = new CreateNewTaskDto()
-                {
-                    Title = Title,
-                    Description = Description,
-                    Priority = priorityEnum,
-                    DueDate = myDateTime,
-                };
+                Title = Title,
+                Description = Description,
+                Priority = priorityEnum,
+                DueDate = myDateTime,
+            };
 
-                var validationResult = _createNewTaskDtoValidator.Validate(createNewTaskDto);
+            var validationResult = _createNewTaskDtoValidator.Validate(createNewTaskDto);
 
-                if (!validationResult.IsValid)
-                {
-                    string allErrors = string.Join("\n", validationResult.Errors.Select(x => x.ErrorMessage));
-                    MessageBox.Show(allErrors);
-                    return;
-                }
-
-                bool successful = await _serviceProvider.GetRequiredService<ICreateNewTaskHandler>().CreateNewTask(createNewTaskDto);
-
-                if (successful)
-                {
-                    CloseWindowAction?.Invoke();
-                }
-            }
-            catch (Exception ex)
+            if (!validationResult.IsValid)
             {
-                MessageBox.Show("Wrong input, could not create New Task");
-                Priority = "Low";
-                Title = null;
-                Description = null;
-                DueDate = DateTime.Today;
+                string allErrors = string.Join("\n", validationResult.Errors.Select(x => x.ErrorMessage));
+                MessageBox.Show(allErrors);
+                ClearAllInput();
+                return;
             }
-           
-          
 
-            
+            bool successful = await _serviceProvider.GetRequiredService<ICreateNewTaskHandler>().CreateNewTask(createNewTaskDto);
+
+            if (successful)
+            {
+                CloseWindowAction?.Invoke();
+            }
+
+        }
+
+        private void ClearAllInput()
+        {
+            Priority = "Low";
+            Title = string.Empty;
+            Description = string.Empty;
+            DueDate = DateTime.Today;
         }
 
 

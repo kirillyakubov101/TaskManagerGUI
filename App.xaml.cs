@@ -6,9 +6,6 @@ using TaskManagerGUI.Services;
 using TaskManagerGUI.ViewModel;
 using TaskManagerGUI.Models.Enums;
 using TaskManagerGUI.Middleware;
-using FluentValidation;
-using TaskManagerGUI.Models.Validators;
-using TaskManagerGUI.Models.Entities;
 
 namespace TaskManagerGUI
 {
@@ -38,6 +35,7 @@ namespace TaskManagerGUI
             _services.AddSingleton<IAuthHandler, AuthService>();
             _services.AddSingleton<ILoginEnterHandler,LoginEnterHander>();
             _services.AddSingleton<ExceptionHandlerService>();
+            _services.AddSingleton<IErrorHandler,ErrorHandler>();
 
             _services.AddTransient<WindowFactoryService>();
             _services.AddTransient<ICreateNewTaskHandler, CreateNewTaskHandler>();

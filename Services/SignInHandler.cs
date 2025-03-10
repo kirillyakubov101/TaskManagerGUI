@@ -12,16 +12,19 @@ namespace TaskManagerGUI.Services
         private readonly HttpClient _httpClient;
         private readonly IAuthHandler _authHandler;
         private readonly INavigationService _navigation;
+        private readonly IErrorHandler _errorHandler;
 
-        public SignInHandler(HttpClient httpClient, IAuthHandler authHandler, INavigationService navigationService)
+        public SignInHandler(HttpClient httpClient, IAuthHandler authHandler, INavigationService navigationService, IErrorHandler errorHandler)
         {
             _httpClient = httpClient;
             _authHandler = authHandler;
             _navigation = navigationService;
+            _errorHandler = errorHandler;
         }
         public async Task SignIn(SignInDto signInDto)
         {
-            var response = await _httpClient.PostAsJsonAsync("https://taskmanager-api-prod-eydvashjgtasftbj.canadaeast-01.azurewebsites.net/api/identity/login", signInDto);
+            HttpResponseMessage response;
+            response = await _httpClient.PostAsJsonAsync("https://taskmanager-api-prod-eydvashjgtasftbj.canadaeast-01.azurewebsites.net/api/identity/login", signInDto);
 
             if (response.IsSuccessStatusCode)
             {
@@ -40,10 +43,10 @@ namespace TaskManagerGUI.Services
                     _navigation.CloseWindow(WindowType.LoginWindow);
                 }
             }
+
             else
             {
-                //TODO:Create exceptions types
-                throw new Exception();
+                _errorHandler.HandleError(response.ReasonPhrase!, System.Windows.MessageBoxImage.Error);
             }
         }
     }

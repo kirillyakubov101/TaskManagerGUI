@@ -12,6 +12,7 @@ namespace TaskManagerGUI.View
         {
             InitializeComponent();
             DataContext = editTaskWindowViewModel;
+            editTaskWindowViewModel.CloseWindowAction  = ()=>this.Close();
         }
     }
 }

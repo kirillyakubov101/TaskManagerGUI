@@ -2,6 +2,8 @@
 using System.Windows.Input;
 using TaskManagerGUI.Commands;
 using TaskManagerGUI.Interfaces;
+using TaskManagerGUI.Models.Entities;
+using TaskManagerGUI.Models.Validators;
 
 namespace TaskManagerGUI.ViewModel;
 
@@ -14,6 +16,7 @@ public class SignUpViewModel : ViewModelBase
 
     private readonly INavigationService _navigationService;
     private readonly ISignUpHandler _signUpHandler;
+    private readonly SignUpDtoValidator _signUpDtoValidator;
 
     public event Action OnSignUpAction;
     private bool _midSignUpProcess = false;
@@ -62,6 +65,7 @@ public class SignUpViewModel : ViewModelBase
         BackToSignInCommand = new RelayCommand(ExecuteBackackToSignIn, CanExecuteBackackToSignIn);
         SignUpCommand = new RelayCommand(ExecuteSignUp, CanExecuteSignUp);
         _signUpHandler = signUpHandler;
+        _signUpDtoValidator = new SignUpDtoValidator();
     }
 
     private bool CanExecuteBackackToSignIn(object parameter)
@@ -91,7 +95,23 @@ public class SignUpViewModel : ViewModelBase
     private async void ExecuteSignUp(object parameter)
     {
         _midSignUpProcess = true;
-        bool status = await _signUpHandler.CreateUser(Nickname,Email,Password);
+        var signUpDto = new SignUpDto()
+        {
+            Nickname = this.Nickname,
+            Email = this.Email,
+            Password = this.Password,
+        };
+
+        var validationResult = _signUpDtoValidator.Validate(signUpDto);
+
+        if (!validationResult.IsValid)
+        {
+            string allErrors = string.Join("\n", validationResult.Errors.Select(x => x.ErrorMessage));
+            MessageBox.Show(allErrors);
+            return;
+        }
+
+        bool status = await _signUpHandler.CreateUser(signUpDto);
         _midSignUpProcess = false;
         if (status)
         {

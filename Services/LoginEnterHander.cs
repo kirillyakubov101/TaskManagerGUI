@@ -39,7 +39,7 @@ namespace TaskManagerGUI.Services
             }
             else
             {
-                return null;
+                throw new Exception();
             }
 
         }

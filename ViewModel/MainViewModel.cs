@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System.Net.Http;
+using System.Windows;
 using System.Windows.Input;
 using TaskManagerGUI.Commands;
 using TaskManagerGUI.Interfaces;
@@ -93,30 +94,27 @@ namespace TaskManagerGUI.ViewModel
                 MessageBox.Show(allErrors);
                 return;
             }
-
-
-            IsLoading = true;
-
             try
             {
+                IsLoading = true;
+
                 if (signInDto != null)
                 {
                     await _signInHandler.SignIn(signInDto);
                     OnSignInAction?.Invoke();
                 }
             }
-
-            catch (Exception ex)
+            catch(Exception ex)
             {
-                throw new Exception();
+                throw ex;
             }
-
             finally
             {
                 IsLoading = false;
             }
 
            
+
 
         }
 
