@@ -86,7 +86,8 @@ public class SignUpViewModel : ViewModelBase
         if (correctCreds) { return true; }
         else
         {
-            MessageBox.Show("Wrong Input");
+            _midSignUpProcess = false;
+            MessageBox.Show("Password and confirm password don't match!");
             return false;
         }
 
@@ -108,8 +109,12 @@ public class SignUpViewModel : ViewModelBase
         {
             string allErrors = string.Join("\n", validationResult.Errors.Select(x => x.ErrorMessage));
             MessageBox.Show(allErrors);
+            _midSignUpProcess = false;
             return;
         }
+
+        bool canEmailBeUsed = await _signUpHandler.IsEmailAvailable(signUpDto.Email);
+
 
         bool status = await _signUpHandler.CreateUser(signUpDto);
         _midSignUpProcess = false;
@@ -118,10 +123,6 @@ public class SignUpViewModel : ViewModelBase
             MessageBox.Show("Registration successful!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
             OnSignUpAction?.Invoke();
             ExecuteBackackToSignIn(null);
-        }
-        else
-        {
-            MessageBox.Show("Error");
         }
     }
 }
