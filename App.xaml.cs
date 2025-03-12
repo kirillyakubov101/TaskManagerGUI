@@ -42,6 +42,7 @@ namespace TaskManagerGUI
             _services.AddTransient<SignUpViewModel>();
             _services.AddTransient<IDeleteTaskHander, DeleteTaskHandler>();
             _services.AddTransient<IEditTaskHandler, EditTaskHandler>();
+            _services.AddTransient<IMessageService, MessageService>();
 
             ServiceProvider = _services.BuildServiceProvider();
 

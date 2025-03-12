@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskManagerGUI", "TaskManag
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharedModels", "..\..\SharedModels\SharedModels\SharedModels.csproj", "{35D0C0F2-AE5D-4643-AAEA-645553B4C656}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskManagerGUITests", "..\TaskManagerGUITests\TaskManagerGUITests.csproj", "{A5108D18-77E2-49A0-9B84-3EF53B558D3B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{35D0C0F2-AE5D-4643-AAEA-645553B4C656}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{35D0C0F2-AE5D-4643-AAEA-645553B4C656}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{35D0C0F2-AE5D-4643-AAEA-645553B4C656}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A5108D18-77E2-49A0-9B84-3EF53B558D3B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A5108D18-77E2-49A0-9B84-3EF53B558D3B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A5108D18-77E2-49A0-9B84-3EF53B558D3B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A5108D18-77E2-49A0-9B84-3EF53B558D3B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

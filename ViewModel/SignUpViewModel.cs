@@ -17,6 +17,7 @@ public class SignUpViewModel : ViewModelBase
     private readonly INavigationService _navigationService;
     private readonly ISignUpHandler _signUpHandler;
     private readonly SignUpDtoValidator _signUpDtoValidator;
+    private readonly IMessageService _messageService;
 
     public event Action OnSignUpAction;
     private bool _midSignUpProcess = false;
@@ -59,13 +60,16 @@ public class SignUpViewModel : ViewModelBase
         }
     }
 
-    public SignUpViewModel(INavigationService navigationService, ISignUpHandler signUpHandler)
+    public bool MidSignUpProcess { get => _midSignUpProcess; set => _midSignUpProcess = value; }
+
+    public SignUpViewModel(INavigationService navigationService, ISignUpHandler signUpHandler, IMessageService messageService)
     {
         _navigationService = navigationService;
         BackToSignInCommand = new RelayCommand(ExecuteBackackToSignIn, CanExecuteBackackToSignIn);
         SignUpCommand = new RelayCommand(ExecuteSignUp, CanExecuteSignUp);
         _signUpHandler = signUpHandler;
         _signUpDtoValidator = new SignUpDtoValidator();
+        _messageService = messageService;
     }
 
     private bool CanExecuteBackackToSignIn(object parameter)
@@ -80,14 +84,14 @@ public class SignUpViewModel : ViewModelBase
         OnSignUpAction?.Invoke();
     }
 
-    private bool CanExecuteSignUp(object parameter)
+    public bool CanExecuteSignUp(object parameter)
     {
         bool correctCreds =  Password == ConfirmPassword && !_midSignUpProcess;
         if (correctCreds) { return true; }
         else
         {
             _midSignUpProcess = false;
-            MessageBox.Show("Password and confirm password don't match!");
+            _messageService.ShowMessage("Password and confirm password don't match!");
             return false;
         }
 
