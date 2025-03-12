@@ -3,10 +3,16 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:converter ="clr-namespace:TaskManagerGUI.Converters"
         xmlns:local="clr-namespace:TaskManagerGUI.View"
         mc:Ignorable="d"
         Title="Sign Up" Height="800" Width="1200"
         WindowStartupLocation="CenterScreen">
+    
+    <Window.Resources>
+        <converter:BoolToVisibilityConverter x:Key="BoolToVis"/>
+    </Window.Resources>
+
     <Grid>
         <!-- Background Shadow Effect -->
         <Rectangle Fill="Black" Opacity="0.1" RadiusX="10" RadiusY="10"
@@ -54,5 +60,12 @@
 
             </StackPanel>
         </Border>
+        <Grid Background="#80000000" Visibility="{Binding IsLoading, Mode=TwoWay, Converter={StaticResource BoolToVis}}">
+            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                <TextBlock Text="Loading..." Foreground="White" FontSize="20" Margin="0,0,0,10"/>
+                <ProgressBar Width="200" IsIndeterminate="True"/>
+            </StackPanel>
+        </Grid>
     </Grid>
+    
 </Window>

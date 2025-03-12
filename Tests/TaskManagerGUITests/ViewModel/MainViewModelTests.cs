@@ -1,6 +1,4 @@
-﻿using FluentAssertions;
-using FluentValidation.TestHelper;
-using Moq;
+﻿using FluentValidation.TestHelper;
 using TaskManagerGUI.Models.Entities;
 using TaskManagerGUI.Models.Validators;
 using Xunit;

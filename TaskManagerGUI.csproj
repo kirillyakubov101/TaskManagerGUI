@@ -9,9 +9,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="TaskManagerGUITests\**" />
     <Compile Remove="Tests\**" />
+    <EmbeddedResource Remove="TaskManagerGUITests\**" />
     <EmbeddedResource Remove="Tests\**" />
+    <None Remove="TaskManagerGUITests\**" />
     <None Remove="Tests\**" />
+    <Page Remove="TaskManagerGUITests\**" />
     <Page Remove="Tests\**" />
   </ItemGroup>
 

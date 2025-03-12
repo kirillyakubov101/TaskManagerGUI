@@ -13,6 +13,7 @@ public class SignUpViewModel : ViewModelBase
     private string _email;
     private string _password;
     private string _Confirmpassword;
+    private bool _isLoading;
 
     private readonly INavigationService _navigationService;
     private readonly ISignUpHandler _signUpHandler;
@@ -20,7 +21,7 @@ public class SignUpViewModel : ViewModelBase
     private readonly IMessageService _messageService;
 
     public event Action OnSignUpAction;
-    private bool _midSignUpProcess = false;
+   
     public ICommand BackToSignInCommand { get; }
     public ICommand SignUpCommand { get; }
 
@@ -59,8 +60,17 @@ public class SignUpViewModel : ViewModelBase
             OnPropertyChanged(nameof(ConfirmPassword));
         }
     }
+    public bool IsLoading
+    {
+        get => _isLoading;
+        set
+        {
+            _isLoading = value;
+            OnPropertyChanged(nameof(IsLoading));
+        }
+    }
 
-    public bool MidSignUpProcess { get => _midSignUpProcess; set => _midSignUpProcess = value; }
+    public bool MidSignUpProcess { get => _isLoading; set => _isLoading = value; }
 
     public SignUpViewModel(INavigationService navigationService, ISignUpHandler signUpHandler, IMessageService messageService)
     {
@@ -86,11 +96,11 @@ public class SignUpViewModel : ViewModelBase
 
     public bool CanExecuteSignUp(object parameter)
     {
-        bool correctCreds =  Password == ConfirmPassword && !_midSignUpProcess;
+        bool correctCreds =  Password == ConfirmPassword && !IsLoading;
         if (correctCreds) { return true; }
         else
         {
-            _midSignUpProcess = false;
+            IsLoading = false;
             _messageService.ShowMessage("Password and confirm password don't match!");
             return false;
         }
@@ -99,7 +109,7 @@ public class SignUpViewModel : ViewModelBase
 
     private async void ExecuteSignUp(object parameter)
     {
-        _midSignUpProcess = true;
+        
         var signUpDto = new SignUpDto()
         {
             Nickname = this.Nickname,
@@ -113,15 +123,16 @@ public class SignUpViewModel : ViewModelBase
         {
             string allErrors = string.Join("\n", validationResult.Errors.Select(x => x.ErrorMessage));
             MessageBox.Show(allErrors);
-            _midSignUpProcess = false;
             return;
         }
 
+        IsLoading = true;
         bool canEmailBeUsed = await _signUpHandler.IsEmailAvailable(signUpDto.Email);
+        if (!canEmailBeUsed) { IsLoading = false; return; }
 
 
         bool status = await _signUpHandler.CreateUser(signUpDto);
-        _midSignUpProcess = false;
+        IsLoading = false;
         if (status)
         {
             MessageBox.Show("Registration successful!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
