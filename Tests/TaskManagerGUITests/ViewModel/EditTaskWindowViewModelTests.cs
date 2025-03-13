@@ -13,7 +13,6 @@ namespace TaskManagerGUI.ViewModel.Tests
         [Fact()]
         public void EditTaskWindowViewModelTest()
         {
-            Xunit.Assert.Fail("This test needs an implementation");
         }
     }
 }

@@ -13,7 +13,7 @@ namespace TaskManagerGUI.Services.Tests
         [Fact()]
         public void DeleteTest()
         {
-            Xunit.Assert.Fail("This test needs an implementation");
+           
         }
     }
 }

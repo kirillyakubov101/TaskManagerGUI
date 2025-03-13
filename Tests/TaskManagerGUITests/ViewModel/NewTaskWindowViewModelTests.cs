@@ -13,7 +13,7 @@ namespace TaskManagerGUI.ViewModel.Tests
         [Fact()]
         public void NewTaskWindowViewModelTest()
         {
-            Xunit.Assert.True(true);
+          
         }
     }
 }

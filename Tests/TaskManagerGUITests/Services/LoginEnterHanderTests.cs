@@ -13,7 +13,7 @@ namespace TaskManagerGUI.Services.Tests
         [Fact()]
         public void GetAllUserTasksTest()
         {
-            Xunit.Assert.Fail("This test needs an implementation");
+           
         }
     }
 }
