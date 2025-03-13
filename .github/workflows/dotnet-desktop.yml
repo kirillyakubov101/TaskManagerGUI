@@ -54,11 +54,12 @@ jobs:
     runs-on: windows-latest  
 
     steps:
-    - name: Checkout Repository
+    - name: Checkout Repository with Submodules
       uses: actions/checkout@v4
       with:
         fetch-depth: 0
-
+        submodules: recursive  # Clones submodules too
+   
     # Install .NET SDK
     - name: Install .NET SDK
       uses: actions/setup-dotnet@v4
@@ -95,3 +96,4 @@ jobs:
       with:
         name: Published App
         path: publish/
+
