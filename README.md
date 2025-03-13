@@ -24,9 +24,9 @@ Task Manager is a WPF-based desktop application with an ASP.NET Web API backend.
 ## Tech Stack
 - **Frontend:** WPF (.NET 6+)
 - **Backend:** ASP.NET Core Web API
-- **Database:** SQL Server
-- **Authentication:** ASP.NET Identity + JWT
-- **API Testing:** Postman
+- **Database:** PostgreSQL
+- **Authentication:** ASP.NET Identity
+- **API Testing:** Postman, HTTPie
 - **Language:** C#
 
 ---
@@ -35,7 +35,7 @@ Task Manager is a WPF-based desktop application with an ASP.NET Web API backend.
 
 ### Prerequisites
 - .NET SDK 6.0+
-- SQL Server
+- PostgreSQL
 - Visual Studio 2022
 
 ---
