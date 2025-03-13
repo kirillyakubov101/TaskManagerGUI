@@ -104,4 +104,10 @@ public class SignUpHandlerTests
         result.Should().BeFalse();
         _errorHandlerMock.Verify(e => e.HandleError(errorMessage, MessageBoxImage.Error), Times.Once);
     }
+
+    [Fact()]
+    public async void CreateUser_CorrectUserDtoPassed_ShouldSucceed()
+    {
+        //
+    }
 }
