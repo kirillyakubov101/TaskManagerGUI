@@ -51,13 +51,18 @@ jobs:
       matrix:
         configuration: [Debug, Release]
 
-    runs-on: windows-latest  
+    runs-on: windows-latest  # For a list of available runner types, refer to https://help.github.com/en/actions/reference/workflow-syntax-for-github-actions#jobsjob_idruns-on
 
     steps:
-    - name: Checkout Repository with Submodules
+    - name: Checkout Repository
       uses: actions/checkout@v4
       with:
         fetch-depth: 0
+
+    # Checkout submodules as well
+    - name: Checkout repository with submodules
+      uses: actions/checkout@v4
+      with:
         submodules: recursive  # Clones submodules too
    
     # Install .NET SDK
@@ -96,4 +101,5 @@ jobs:
       with:
         name: Published App
         path: publish/
+
 
