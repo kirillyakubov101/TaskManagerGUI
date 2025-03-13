@@ -26,7 +26,7 @@ namespace TaskManagerGUI.Services
 
             // Send the request
             var response = await _httpClient.SendAsync(request);
-
+            
             if (response.IsSuccessStatusCode)
             {
                 var options = new JsonSerializerOptions

@@ -38,7 +38,7 @@ namespace TaskManagerGUI.Services
             if(response.IsSuccessStatusCode == false)
             {
                 var json = await response.Content.ReadAsStringAsync();
-                var errorContent = JsonSerializer.Deserialize<SignUpEmailErrorResponse>(json);
+                var errorContent = JsonSerializer.Deserialize<APIResponseMessage>(json);
                 if(errorContent.message != null)
                 {
                     errorHandler.HandleError(errorContent.message, MessageBoxImage.Error);
@@ -55,7 +55,7 @@ namespace TaskManagerGUI.Services
         }
     }
 
-    public class SignUpEmailErrorResponse
+    public class APIResponseMessage
     {
         public string message { get; set; }
     }

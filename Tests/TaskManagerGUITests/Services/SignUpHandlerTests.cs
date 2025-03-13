@@ -6,7 +6,9 @@ using System.Text;
 using System.Text.Json;
 using System.Windows;
 using TaskManagerGUI.Interfaces;
+using TaskManagerGUI.Models.Entities;
 using Xunit;
+using Xunit.Sdk;
 
 namespace TaskManagerGUI.Services.Tests;
 
@@ -53,7 +55,7 @@ public class SignUpHandlerTests
         // Arrange
         var email = "Nonavailable@email.com";
         var errorMessage = "Email is already in use.";
-        var SignUpEmailErrorResponse = new SignUpEmailErrorResponse() { message = errorMessage };
+        var SignUpEmailErrorResponse = new APIResponseMessage() { message = errorMessage };
         var jsonResponse = JsonSerializer.Serialize(SignUpEmailErrorResponse);
 
         var responseMessage = new HttpResponseMessage(HttpStatusCode.BadRequest)
@@ -105,8 +107,56 @@ public class SignUpHandlerTests
     }
 
     [Fact()]
-    public async void CreateUser_CorrectUserDtoPassed_ShouldSucceed()
+    public async void CreateUser_ServerWorks_ShouldSucceed()
     {
-        //
+        // Arrange
+        var signUpDto = new SignUpDto { Email = "test@example.com", Password = "Password1!" };
+
+        var responseMessage = new HttpResponseMessage
+        {
+            StatusCode = HttpStatusCode.Created
+        };
+
+        _httpMessageHandlerMock
+          .Protected()
+          .Setup<Task<HttpResponseMessage>>("SendAsync",
+              ItExpr.IsAny<HttpRequestMessage>(),
+              ItExpr.IsAny<CancellationToken>())
+          .ReturnsAsync(responseMessage);
+
+
+        // Act
+        var result = await _signUpHandler.CreateUser(signUpDto);
+
+        // Assert
+        result.Should().BeTrue();
+        _errorHandlerMock.Verify(e => e.HandleError(It.IsAny<string>(), MessageBoxImage.Error), Times.Never);
+    }
+
+    [Fact()]
+    public async void CreateUser_ServerOffline_ShouldFail()
+    {
+        // Arrange
+        var signUpDto = new SignUpDto { Email = "test@example.com", Password = "Password1!" };
+
+        var responseMessage = new HttpResponseMessage
+        {
+            StatusCode = HttpStatusCode.BadGateway
+        };
+
+        _httpMessageHandlerMock
+          .Protected()
+          .Setup<Task<HttpResponseMessage>>("SendAsync",
+              ItExpr.IsAny<HttpRequestMessage>(),
+              ItExpr.IsAny<CancellationToken>())
+          .ReturnsAsync(responseMessage);
+
+
+        // Act
+        var result = await _signUpHandler.CreateUser(signUpDto);
+
+        // Assert
+        result.Should().BeFalse();
+        _errorHandlerMock.Verify(e => e.HandleError(It.IsAny<string>(), MessageBoxImage.Error), Times.Once);
     }
 }

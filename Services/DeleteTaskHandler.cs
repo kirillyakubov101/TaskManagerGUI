@@ -10,14 +10,17 @@ public class DeleteTaskHandler(IAuthHandler authHandler, HttpClient httpClient) 
 {
     public async Task<bool> Delete(int taskId)
     {
-        if (!authHandler.IsAuthenticated()) { throw new Exception("No token"); }
+        if (!authHandler.IsAuthenticated())
+        {
+            throw new Exception("No token");
+        }
 
         var token = authHandler.GetSessionToken();
-        var request = new HttpRequestMessage(HttpMethod.Delete, $"https://taskmanager-api-prod-eydvashjgtasftbj.canadaeast-01.azurewebsites.net/api/tasks/{taskId}");
-        request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
+        var requestUri = $"https://taskmanager-api-prod-eydvashjgtasftbj.canadaeast-01.azurewebsites.net/api/tasks/{taskId}";
 
+        httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-        var response = await httpClient.SendAsync(request);
+        var response = await httpClient.DeleteAsync(requestUri);
 
         if (!response.IsSuccessStatusCode)
         {

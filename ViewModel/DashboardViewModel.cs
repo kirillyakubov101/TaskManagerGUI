@@ -99,11 +99,10 @@ namespace TaskManagerGUI.ViewModel
             var taskToDelete = parameter as UserTaskDto;
             if (taskToDelete != null)
             {
-                // TODO: Call API to delete the task from the backend
                 var status = await _deleteTaskHander.Delete(taskToDelete.Id);
                 if(status)
                 {
-                    MessageBox.Show($"Task with id {taskToDelete.Id} was removed");
+                    MessageBox.Show($"Task: {taskToDelete.Title} was removed");
                 }
                 else
                 {

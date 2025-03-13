@@ -41,9 +41,9 @@
                 <TextBlock Text="Password" FontSize="14" Foreground="#666"/>
                 <local:CustomPasswordBox x:Name="txtpassword" Password="{Binding Password, UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}"/>
 
-                <!-- Forgot Password -->
+                <!-- Forgot Password --><!--
                 <TextBlock Text="Forgot Password?" Foreground="#0078D7" FontSize="12"
-                    HorizontalAlignment="Right" Cursor="Hand" Margin="0,0,0,10"/>
+                    HorizontalAlignment="Right" Cursor="Hand" Margin="0,0,0,10"/>-->
 
                 <!-- Sign In Button -->
                 <Button Content="Sign In" Background="#0078D7" Foreground="White"
