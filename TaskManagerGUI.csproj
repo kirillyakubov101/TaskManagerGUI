@@ -18,7 +18,7 @@
     <None Remove="TaskManager.SharedModels\**" />
     <None Remove="TaskManagerGUITests\**" />
     <None Remove="Tests\**" />
-    <Page Remove="TaskManager.SharedModels\**" />
+    <Page Remove="TaskManager.SharedModels\**" /> 
     <Page Remove="TaskManagerGUITests\**" />
     <Page Remove="Tests\**" />
   </ItemGroup>
