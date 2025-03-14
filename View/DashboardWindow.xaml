@@ -6,28 +6,117 @@
         xmlns:local="clr-namespace:TaskManagerGUI.View"
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"
-        Title="DashboardWindow" Height="600" Width="800">
-    <Grid>
+        Title="Dashboard"
+        Height="600" Width="950">
 
-        <Button Content="Sign Out"
-                Width="80" Height="30"
-                HorizontalAlignment="Right"
-                VerticalAlignment="Top"
-                Margin="0,10,10,0"
-                Command="{Binding SignOutCommand}"/>
+    <!-- Define Resources -->
+    <Window.Resources>
+        <!-- Gradient Background -->
+        <LinearGradientBrush x:Key="WindowBackground" StartPoint="0,0" EndPoint="1,1">
+            <GradientStop Color="#2A2D3E" Offset="0"/>
+            <GradientStop Color="#1E1F2F" Offset="1"/>
+        </LinearGradientBrush>
 
+        <!-- Button Style -->
+        <Style x:Key="RoundedButton" TargetType="Button">
+            <Setter Property="Background" Value="#4CAF50"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Padding" Value="10,5"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Width" Value="120"/>
+            <Setter Property="Height" Value="35"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" 
+                                CornerRadius="15"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#45A049"/>
+                </Trigger>
+                <Trigger Property="IsPressed" Value="True">
+                    <Setter Property="Background" Value="#388E3C"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Resources>
+
+    <!-- Grid Layout -->
+    <Grid Background="{StaticResource WindowBackground}">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="37*"/>
+            <ColumnDefinition Width="13*"/>
+        </Grid.ColumnDefinitions>
+        <!-- Top Panel for Buttons -->
+        <Grid Grid.ColumnSpan="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- Add Task Button (Top Left) -->
+            <Button Content="Add Task"
+                    Style="{StaticResource RoundedButton}"
+                    Command="{Binding AddNewTaskCommand}"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Top"
+                    Margin="10"
+                    Grid.Column="0"/>
+
+            <!-- Sign Out Button (Top Right) -->
+            <Button Content="Sign Out"
+                    Style="{StaticResource RoundedButton}"
+                    Command="{Binding SignOutCommand}"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Top"
+                    Margin="10"
+                    Grid.Column="2"/>
+        </Grid>
+
+        <!-- Task List -->
         <ListView Name="TaskListView"
-                  Margin="10,50,10,10"
+                  Margin="10,60,10,10"
                   ItemsSource="{Binding Tasks}"
                   SelectionMode="Single" 
-                  SelectedItem="{Binding CurrentSelectedTask}">
+                  SelectedItem="{Binding CurrentSelectedTask}" Grid.ColumnSpan="2"
+                  ScrollViewer.CanContentScroll="False"
+                  ScrollViewer.VerticalScrollBarVisibility="Auto">
+
+            <ListView.ItemContainerStyle>
+                <Style TargetType="ListViewItem">
+                    <Setter Property="Height" Value="50"/>
+                    <Setter Property="FontSize" Value="16"/>
+                    <Setter Property="Padding" Value="10"/>
+                    <Setter Property="Margin" Value="5"/>
+                </Style>
+            </ListView.ItemContainerStyle>
+
+            <ListView.Resources>
+                <Style TargetType="GridViewColumnHeader">
+                    <Setter Property="FontSize" Value="14"/>
+                    <Setter Property="FontWeight" Value="Bold"/>
+                    <Setter Property="Foreground" Value="White"/>
+                    <Setter Property="Background" Value="#44475a"/>
+                    <Setter Property="Padding" Value="10,5"/>
+                    <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                </Style>
+            </ListView.Resources>
 
             <ListView.ContextMenu>
                 <ContextMenu DataContext="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource Self}}">
                     <MenuItem Header="Edit"
                               Command="{Binding EditTaskCommand}"
                               CommandParameter="{Binding PlacementTarget.SelectedItem, RelativeSource={RelativeSource AncestorType=ContextMenu}}"/>
-
                     <MenuItem Header="Delete"
                               Command="{Binding DeleteTaskCommand}"
                               CommandParameter="{Binding PlacementTarget.SelectedItem, RelativeSource={RelativeSource AncestorType=ContextMenu}}"/>
@@ -36,21 +125,14 @@
 
             <ListView.View>
                 <GridView>
-                    <GridViewColumn Header="Title" DisplayMemberBinding="{Binding Title}" Width="auto"/>
-                    <GridViewColumn Header="Description" DisplayMemberBinding="{Binding Description}" Width="auto"/>
-                    <GridViewColumn Header="Status" DisplayMemberBinding="{Binding Status}" Width="auto"/>
-                    <GridViewColumn Header="Priority" DisplayMemberBinding="{Binding Priority}" Width="auto"/>
-                    <GridViewColumn Header="Created At" DisplayMemberBinding="{Binding CreatedAt}" Width="auto"/>
-                    <GridViewColumn Header="Due Date" DisplayMemberBinding="{Binding DueDate}" Width="auto"/>
+                    <GridViewColumn Header="Title" DisplayMemberBinding="{Binding Title}" Width="150"/>
+                    <GridViewColumn Header="Description" DisplayMemberBinding="{Binding Description}" Width="200"/>
+                    <GridViewColumn Header="Status" DisplayMemberBinding="{Binding Status}" Width="150"/>
+                    <GridViewColumn Header="Priority" DisplayMemberBinding="{Binding Priority}" Width="150"/>
+                    <GridViewColumn Header="Created At" DisplayMemberBinding="{Binding CreatedAt,StringFormat=\{0:yyyy-MM-dd\} }" Width="150"/>
+                    <GridViewColumn Header="Due Date" DisplayMemberBinding="{Binding DueDate, StringFormat=\{0:yyyy-MM-dd\}}" Width="150"/>
                 </GridView>
             </ListView.View>
         </ListView>
-
-        <Button Content="Add Task"
-                Width="80" Height="30"
-                HorizontalAlignment="Left"
-                VerticalAlignment="Top"
-                Margin="10,10,0,0"
-                Command="{Binding AddNewTaskCommand}"/>
     </Grid>
 </Window>
