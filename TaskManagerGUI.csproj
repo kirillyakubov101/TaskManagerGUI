@@ -9,9 +9,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="TaskManager.SharedModels\**" />
     <Compile Remove="Tests\**" />
+    <EmbeddedResource Remove="TaskManager.SharedModels\**" />
     <EmbeddedResource Remove="Tests\**" />
+    <None Remove="TaskManager.SharedModels\**" />
     <None Remove="Tests\**" />
+    <Page Remove="TaskManager.SharedModels\**" />
     <Page Remove="Tests\**" />
   </ItemGroup>
 
@@ -19,6 +23,11 @@
   <ItemGroup>
     <PackageReference Include="FluentValidation" Version="11.11.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.2" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\TaskManagementAPI\TaskManger.API\TaskManager.SharedModels\SharedModels.csproj" />
   </ItemGroup>
 
 </Project>
