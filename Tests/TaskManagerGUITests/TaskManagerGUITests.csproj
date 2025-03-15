@@ -17,7 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\TaskManagerGUI.csproj" />
+    <ProjectReference Include="..\..\src\TaskManagerGUI.csproj" />
   </ItemGroup>
 
   <ItemGroup>

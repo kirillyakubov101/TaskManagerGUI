@@ -1,0 +1,3 @@
+[submodule "Shared/TaskManager.SharedModels"]
+	path = Shared/TaskManager.SharedModels
+	url = https://github.com/kirillyakubov101/TaskManager.SharedModels.git

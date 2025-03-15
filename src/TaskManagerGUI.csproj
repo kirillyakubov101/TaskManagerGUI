@@ -25,4 +25,9 @@
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.2" />
   </ItemGroup>
 
+
+  <ItemGroup>
+    <ProjectReference Include="..\Shared\TaskManager.SharedModels\SharedModels.csproj" />
+  </ItemGroup>
+
 </Project>
