@@ -12,6 +12,9 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
+        with:
+          submodules: true  # Ensures submodules are fetched
+          fetch-depth: 0  # Needed for proper submodule history
 
       - name: Setup .NET
         uses: actions/setup-dotnet@v3
