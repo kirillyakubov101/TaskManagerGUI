@@ -13,35 +13,37 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
         with:
-          submodules: true  # Ensures submodules are fetched
-          fetch-depth: 0  # Needed for proper submodule history
+          submodules: recursive  # Ensures submodules are fetched
+          fetch-depth: 0  # Required for submodules to have full history
+
+      - name: Initialize and Update Submodules
+        run: git submodule update --init --recursive
 
       - name: Setup .NET
         uses: actions/setup-dotnet@v3
         with:
-          dotnet-version: 9.0.x  # Adjust to your .NET version
+          dotnet-version: '9.0.x'  # Adjust to your target .NET version
 
       - name: Restore Dependencies
-        run: dotnet restore
+        run: dotnet restore TaskManagerGUI.sln
 
-      - name: Build Application
-        run: dotnet publish -c Release -o output
+      - name: Build Solution
+        run: dotnet build TaskManagerGUI.sln --configuration Release --no-restore
 
-      - name: Archive Build
-        run: Compress-Archive -Path output/* -DestinationPath release.zip
+      - name: Publish Application
+        run: dotnet publish TaskManagerGUI.sln --configuration Release --output publish
 
-      - name: Get Current Date
-        id: date
-        run: echo "date=$(Get-Date -Format 'yyyy-MM-dd_HH-mm')" >> $env:GITHUB_ENV
+      - name: Package Release
+        run: Compress-Archive -Path publish\* -DestinationPath TaskManagerGUI.zip
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: release-${{ env.date }}
-          name: Release ${{ env.date }}
-          body: "🚀 New release for the latest changes."
+          tag_name: v1.0.${{ github.run_number }}
+          name: "TaskManagerGUI Release v1.0.${{ github.run_number }}"
+          body: "Automated release for TaskManagerGUI"
           draft: false
           prerelease: false
-          files: release.zip
+          files: TaskManagerGUI.zip
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
