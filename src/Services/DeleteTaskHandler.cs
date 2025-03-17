@@ -6,13 +6,14 @@ using TaskManagerGUI.Interfaces;
 
 namespace TaskManagerGUI.Services;
 
-public class DeleteTaskHandler(IAuthHandler authHandler, HttpClient httpClient) : IDeleteTaskHander
+public class DeleteTaskHandler(IAuthHandler authHandler, HttpClient httpClient,IErrorHandler errorHandler) : IDeleteTaskHander
 {
     public async Task<bool> Delete(int taskId)
     {
         if (!authHandler.IsAuthenticated())
         {
-            throw new Exception("No token");
+            errorHandler.HandleError("No Token");
+            return false;
         }
 
         var token = authHandler.GetSessionToken();
@@ -25,7 +26,7 @@ public class DeleteTaskHandler(IAuthHandler authHandler, HttpClient httpClient) 
         if (!response.IsSuccessStatusCode)
         {
             var errorContent = await response.Content.ReadAsStringAsync();
-            throw new Exception($"Error: {response.StatusCode}, {errorContent}");
+            errorHandler.HandleError($"Error: {response.StatusCode}, {errorContent}");
         }
 
         return response.IsSuccessStatusCode;
