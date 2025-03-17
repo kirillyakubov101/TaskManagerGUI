@@ -7,11 +7,11 @@ using TaskManagerGUI.Interfaces;
 
 namespace TaskManagerGUI.Services
 {
-    public class EditTaskHandler(IAuthHandler authHandler, HttpClient httpClient) : IEditTaskHandler
+    public class EditTaskHandler(IAuthHandler authHandler, HttpClient httpClient,IErrorHandler errorHandler) : IEditTaskHandler
     {
         public async Task<bool> EditTask(int taskId, UserTaskEditDto UserTaskEditDto)
         {
-            if (!authHandler.IsAuthenticated()) { throw new Exception("No token"); }
+            if (!authHandler.IsAuthenticated()) { errorHandler.HandleError("No Token"); return false; }
 
             var token = authHandler.GetSessionToken();
 
@@ -34,7 +34,8 @@ namespace TaskManagerGUI.Services
             if (!response.IsSuccessStatusCode)
             {
                 var errorContent = await response.Content.ReadAsStringAsync();
-                throw new Exception($"Error: {response.StatusCode}, {errorContent}");
+                errorHandler.HandleError($"Error: {response.StatusCode}, {errorContent}");
+                return false;
             }
 
             return response.IsSuccessStatusCode;
