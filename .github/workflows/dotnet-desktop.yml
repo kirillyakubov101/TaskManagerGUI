@@ -47,7 +47,7 @@ jobs:
   build:
     strategy:
       matrix:
-        configuration: [Release]
+        configuration: [Debug, Release]  # ✅ Builds in both Debug & Release
 
     runs-on: windows-latest  
 
@@ -57,11 +57,11 @@ jobs:
       with:
         fetch-depth: 0
 
-    # Checkout submodules as well
+    # Checkout submodules
     - name: Checkout repository with submodules
       uses: actions/checkout@v4
       with:
-        submodules: recursive  # Clones submodules too
+        submodules: recursive  
 
     # Initialize and update submodules explicitly
     - name: Initialize and update submodules
@@ -77,31 +77,20 @@ jobs:
     - name: Restore Dependencies
       run: dotnet restore TaskManagerGUI.sln
 
-    # Build Project
+    # Build Project (Debug & Release)
     - name: Build Project
       run: dotnet build TaskManagerGUI.sln --configuration ${{ matrix.configuration }} --no-restore
 
     # Run Unit Tests
     - name: Run Tests
-      run: dotnet test TaskManagerGUI.sln --configuration ${{ matrix.configuration }} --no-build --logger "trx;LogFileName=test-results.trx"
+      run: dotnet test TaskManagerGUI.sln --configuration ${{ matrix.configuration }} --no-build --logger "trx;LogFileName=test-results-${{ matrix.configuration }}.trx"
 
     # Upload Test Results (Optional)
     - name: Upload Test Results
       uses: actions/upload-artifact@v4
       with:
-        name: Test Results
-        path: TestResults/test-results.trx
+        name: Test Results (${{ matrix.configuration }})
+        path: TestResults/test-results-${{ matrix.configuration }}.trx
 
-    # Publish Application (For Release Build Only)
-    - name: Publish Application
-      if: matrix.configuration == 'Release'
-      run: dotnet publish TaskManagerGUI.sln -c Release -o publish/
-
-    # Upload Build Artifacts (Executable Files)
-    - name: Upload Build Artifacts
-      uses: actions/upload-artifact@v4
-      with:
-        name: Published App
-        path: publish/
 
 
