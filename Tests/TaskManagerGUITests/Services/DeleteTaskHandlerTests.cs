@@ -68,7 +68,7 @@ public class DeleteTaskHandlerTests
         var result = await _deleteTaskHandler.Delete(taskId);
 
         // Assert
-        result.Should().BeTrue();
+        result.Should().BeFalse();
 
     }
 }
