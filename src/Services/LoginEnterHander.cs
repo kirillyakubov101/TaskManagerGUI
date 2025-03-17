@@ -10,16 +10,23 @@ namespace TaskManagerGUI.Services
     {
         private readonly HttpClient _httpClient;
         private readonly IAuthHandler _authHandler;
+        private readonly IErrorHandler _errorHandler;
 
-        public LoginEnterHander(HttpClient httpClient, IAuthHandler authHandler)
+        public LoginEnterHander(HttpClient httpClient, IAuthHandler authHandler, IErrorHandler errorHandler)
         {
             _httpClient = httpClient;
             _authHandler = authHandler;
+            _errorHandler = errorHandler;
         }
 
         public async Task<IEnumerable<UserTaskDto>> GetAllUserTasks()
         {
-            if (!_authHandler.IsAuthenticated()) { throw new Exception("No token"); }
+            if (!_authHandler.IsAuthenticated())
+            {
+                _errorHandler.HandleError("No token");
+                return Enumerable.Empty<UserTaskDto>();
+            }
+               
             // Set up the HTTP GET request with the Authorization header
             var request = new HttpRequestMessage(HttpMethod.Get, "https://taskmanager-api-prod-eydvashjgtasftbj.canadaeast-01.azurewebsites.net/api/tasks");
             request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _authHandler.GetSessionToken());
@@ -35,13 +42,10 @@ namespace TaskManagerGUI.Services
                 };
                 var tasksJson = await response.Content.ReadAsStringAsync();
                 var tasks = JsonSerializer.Deserialize<IEnumerable<UserTaskDto>>(tasksJson, options);
-                return tasks;
-            }
-            else
-            {
-                throw new Exception();
+                return tasks ?? Enumerable.Empty<UserTaskDto>();
             }
 
+            return Enumerable.Empty<UserTaskDto>();
         }
     }
 }

@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"
         Title="Dashboard"
-        Height="600" Width="950">
+        Height="600" Width="975">
 
     <!-- Define Resources -->
     <Window.Resources>
