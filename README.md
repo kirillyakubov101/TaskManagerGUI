@@ -3,6 +3,27 @@
 ## Overview
 Task Manager is a WPF-based desktop application with an ASP.NET Web API backend. It allows users to manage tasks with features such as authentication, task creation, and real-time updates.
 
+
+## Screenshots
+
+### 1. Login Screen
+![Login Screen](assets/screen1.png)
+
+### 2. Task List View / Dashboard
+![Task List](assets/screen2.png)
+
+### 3. Create New Task
+![New Task](assets/screen4.png)
+
+### 4. Edit Task
+![Edit Task](assets/screen6.png)
+
+### 5. Updated Task List
+![Updated Task List](assets/screen7.png)
+
+### 6. Signup Page
+![Signup Page](assets/screen3.png)
+
 ---
 
 ## Features
