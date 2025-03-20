@@ -5,7 +5,6 @@ using System.Windows.Input;
 using TaskManagerGUI.Commands;
 using TaskManagerGUI.Interfaces;
 using TaskManagerGUI.Models.Entities;
-using FluentValidation;
 using TaskManagerGUI.Models.Validators;
 
 namespace TaskManagerGUI.ViewModel
@@ -16,7 +15,7 @@ namespace TaskManagerGUI.ViewModel
         private string _description;
         private string _priority = "Low";     // Default priority
         private DateTime? _dueDate = DateTime.Today;
-
+        private bool IsTaskCreated = false;
         private IServiceProvider _serviceProvider;
 
         //validators
@@ -28,7 +27,7 @@ namespace TaskManagerGUI.ViewModel
 
         public Action? CloseWindowAction;
 
-        public bool IsTaskCreated { get; private set; } = false;
+       
 
         public NewTaskWindowViewModel(IServiceProvider serviceProvider)
         {
@@ -74,7 +73,7 @@ namespace TaskManagerGUI.ViewModel
 
         private bool CanCreateTaskCommand(object parameter)
         {
-            return true;
+            return !IsTaskCreated;
         }
 
         private async void ExecuteCreateTaskCommand(object parameter)
@@ -110,6 +109,7 @@ namespace TaskManagerGUI.ViewModel
 
             if (successful)
             {
+                IsTaskCreated = true;
                 CloseWindowAction?.Invoke();
             }
 

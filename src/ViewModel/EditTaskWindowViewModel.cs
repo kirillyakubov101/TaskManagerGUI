@@ -17,6 +17,7 @@ namespace TaskManagerGUI.ViewModel
         private string _priority;
         private string _status;
         private DateTime _dueDate;
+        private bool _taskEditted = false;
 
         private readonly IServiceProvider _serviceProvider;
         private UserTaskDto _userTaskDto;
@@ -40,7 +41,7 @@ namespace TaskManagerGUI.ViewModel
             DueDate = (DateTime)userTaskDto.DueDate;
 
             ApplyChangesCommand = new RelayCommand(ExecuteApplyChangesCommand, CanExecuteApplyChangesCommand);
-            CancelCommand = new RelayCommand(ExecuteCancelCommand,CanExecuteApplyChangesCommand);
+            CancelCommand = new RelayCommand(ExecuteCancelCommand, CanExecuteCancelCommand);
         }
 
         public string Title
@@ -76,7 +77,7 @@ namespace TaskManagerGUI.ViewModel
         
         private bool CanExecuteApplyChangesCommand(object parameter)
         {
-            return true;
+            return !_taskEditted;
         }
 
         private async void ExecuteApplyChangesCommand(object parameter)
@@ -112,6 +113,7 @@ namespace TaskManagerGUI.ViewModel
             var status = await _serviceProvider.GetRequiredService<IEditTaskHandler>().EditTask(_userTaskDto.Id, userTaskEditDto);
             if(status)
             {
+                _taskEditted = true;
                 MessageBox.Show("Updated");
                 CloseWindowAction?.Invoke();
             }
