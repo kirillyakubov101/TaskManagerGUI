@@ -73,6 +73,18 @@
                     Margin="10"
                     Grid.Column="0"/>
 
+            <!-- Welcome Text (Centered) -->
+            <TextBlock Text="{Binding NickName, Mode=OneWay}"
+               FontSize="25"
+               Margin="10"
+               VerticalAlignment="Top"
+               HorizontalAlignment="Center"
+               FontWeight="Bold"
+               Foreground="#FF4CAF50" 
+               Grid.Column="1"/>
+
+
+
             <!-- Sign Out Button (Top Right) -->
             <Button Content="Sign Out"
                     Style="{StaticResource RoundedButton}"

@@ -26,6 +26,8 @@ namespace TaskManagerGUI.ViewModel
         private readonly IDeleteTaskHander _deleteTaskHander;
 
         private UserTaskDto _currentSelectedTask;
+        private string _nickName = "Kirill";
+        private const string NickNameWelcomeMessage = "Welcome ";
 
         public UserTaskDto CurrentSelectedTask
         {
@@ -34,6 +36,16 @@ namespace TaskManagerGUI.ViewModel
             {
                 _currentSelectedTask = value;
                 OnPropertyChanged(nameof(CurrentSelectedTask));
+            }
+        }
+
+        public string NickName
+        {
+            get => _nickName;
+            set
+            {
+                _nickName = value;
+                OnPropertyChanged(nameof(NickName));
             }
         }
 
