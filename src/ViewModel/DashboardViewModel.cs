@@ -26,7 +26,7 @@ namespace TaskManagerGUI.ViewModel
         private readonly IDeleteTaskHander _deleteTaskHander;
 
         private UserTaskDto _currentSelectedTask;
-        private string _nickName = "Kirill";
+        private string _nickName;
         private const string NickNameWelcomeMessage = "Welcome ";
 
         public UserTaskDto CurrentSelectedTask
@@ -44,7 +44,7 @@ namespace TaskManagerGUI.ViewModel
             get => _nickName;
             set
             {
-                _nickName = value;
+                _nickName = NickNameWelcomeMessage + value;
                 OnPropertyChanged(nameof(NickName));
             }
         }
@@ -76,6 +76,12 @@ namespace TaskManagerGUI.ViewModel
             {
                 Tasks.Add(item);
             }
+        }
+
+        public async Task PopulateUserNickname()
+        {
+           var userInfo =  await _loginEnterHandler.GetUserInfo();
+           NickName = userInfo.UserNickname;
         }
 
         private void ExecuteSignOut(object parameter)

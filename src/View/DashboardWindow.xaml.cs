@@ -15,7 +15,9 @@ namespace TaskManagerGUI.View
             DataContext = dashboardViewModel;
 
             this.Closed += DashboardWindow_Closed;
+            
         }
+
 
         protected override async void OnActivated(EventArgs e)
         {
@@ -23,6 +25,7 @@ namespace TaskManagerGUI.View
             if (DataContext is DashboardViewModel dashboardViewModel)
             {
                 await dashboardViewModel.PopulateUserTaskList();
+                await dashboardViewModel.PopulateUserNickname();
             }
             else
             {
