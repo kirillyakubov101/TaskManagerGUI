@@ -47,5 +47,44 @@ namespace TaskManagerGUI.Services
 
             return Enumerable.Empty<UserTaskDto>();
         }
+
+        public async Task<UserInfoDto> GetUserInfo()
+        {
+            //declare default user
+            UserInfoDto userInfoDto = new UserInfoDto()
+            {
+                UserNickname = "DefaultUser"
+            };
+
+            if (!_authHandler.IsAuthenticated())
+            {
+                _errorHandler.HandleError("No token");
+                return userInfoDto;
+            }
+
+            // Set up the HTTP GET request with the Authorization header
+            var request = new HttpRequestMessage(HttpMethod.Get, "https://taskmanager-api-prod-eydvashjgtasftbj.canadaeast-01.azurewebsites.net/api/identity/GetCurrentUser");
+            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _authHandler.GetSessionToken());
+
+            var response = await _httpClient.SendAsync(request);
+             
+
+            if (response.IsSuccessStatusCode)
+            {
+                var options = new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true
+                };
+
+                var userJson = await response.Content.ReadAsStringAsync();
+                var userInfo = JsonSerializer.Deserialize<UserInfoDto>(userJson, options);
+                if(userInfo != null)
+                {
+                    userInfoDto = userInfo;
+                }
+            }
+
+            return userInfoDto;
+        }
     }
 }
